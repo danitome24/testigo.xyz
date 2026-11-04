@@ -1,0 +1,80 @@
+---
+// Ilustración del hero: las dos hojas reales en miniatura.
+// Lo escrito "a bolígrafo" es solo alias y lugares (como los rellenaría el usuario a mano); las palabras quedan en blanco a propósito.
+const words = Array.from({ length: 12 }, (_, i) => i + 1);
+---
+
+<div class="relative mx-auto h-[500px] w-full max-w-[460px] sm:h-[580px]" aria-hidden="true">
+  <!-- Hoja trasera: instrucciones (el índice) -->
+  <div
+    class="paper-shadow settle absolute top-2 left-0 w-[80%] sm:w-[72%] rounded-[2px] bg-paper p-5 sm:p-6"
+    style="--r: -4deg; --r-from: -9deg; transform: rotate(-4deg);"
+  >
+    <p class="text-[0.8rem] leading-tight font-extrabold sm:text-[0.9rem]">
+      Instrucciones de recuperación para mis herederos
+    </p>
+    <div class="mt-4 border-[1.5px] border-graphite p-3">
+      <p class="text-[0.7rem] font-bold sm:text-[0.78rem]">Frase semilla n.º 1</p>
+      <p class="mt-2 flex items-end gap-2 text-[0.62rem] sm:text-[0.7rem]">
+        <span class="shrink-0">Copia 1 está en:</span>
+        <span class="font-hand -mb-[3px] flex-1 border-b border-pencil pl-1 text-[1.15rem] leading-none whitespace-nowrap text-ink sm:text-[1.3rem]">
+          caja fuerte
+        </span>
+      </p>
+      <p class="mt-2 flex items-end gap-2 text-[0.62rem] sm:text-[0.7rem]">
+        <span class="shrink-0">Copia 2 está en:</span>
+        <span class="font-hand -mb-[3px] flex-1 border-b border-pencil pl-1 text-[1.15rem] leading-none whitespace-nowrap text-ink sm:text-[1.3rem]">
+          casa de mi hermana
+        </span>
+      </p>
+    </div>
+    <div class="mt-4 space-y-2">
+      <div class="h-[5px] w-full rounded-full bg-desk"></div>
+      <div class="h-[5px] w-11/12 rounded-full bg-desk"></div>
+      <div class="h-[5px] w-4/5 rounded-full bg-desk"></div>
+      <div class="h-[5px] w-full rounded-full bg-desk"></div>
+      <div class="h-[5px] w-2/3 rounded-full bg-desk"></div>
+    </div>
+  </div>
+
+  <!-- Hoja delantera: hoja de backup con las palabras en blanco -->
+  <div
+    class="paper-shadow settle-late absolute top-[175px] right-0 w-[82%] sm:w-[74%] rounded-[2px] bg-paper p-5 sm:top-[200px] sm:p-6"
+    style="--r: 3deg; --r-from: 8deg; transform: rotate(3deg);"
+  >
+    <div class="flex items-baseline justify-between gap-3 border-b-2 border-graphite pb-2">
+      <p class="text-[0.85rem] font-extrabold whitespace-nowrap sm:text-[0.95rem]">Frase semilla n.º 1</p>
+      <p class="text-[0.6rem] font-semibold whitespace-nowrap sm:text-[0.68rem]">Hoja de backup 1 de 2</p>
+    </div>
+    <p class="mt-3 flex items-end gap-2 text-[0.65rem] sm:text-[0.72rem]">
+      <span>Alias:</span>
+      <span class="font-hand -mb-[3px] flex-1 border-b border-pencil pl-1 text-[1.2rem] leading-none text-ink sm:text-[1.4rem]">
+        Ledger del despacho
+      </span>
+    </p>
+    <div class="mt-4 grid grid-flow-col grid-cols-2 grid-rows-6 gap-x-5 gap-y-[9px]">
+      {
+        words.map((n) => (
+          <div class="flex items-end gap-2">
+            <span class="w-4 text-right text-[0.6rem] font-bold sm:text-[0.66rem]">{n}.</span>
+            <span class="h-3 flex-1 border-b border-graphite" />
+          </div>
+        ))
+      }
+    </div>
+    <p class="mt-4 flex items-center gap-2 text-[0.6rem] text-pencil sm:text-[0.66rem]">
+      <span class="inline-block size-3 border-[1.5px] border-graphite"></span>
+      Verificada en el dispositivo
+    </p>
+
+    <!-- El pósit: el elemento memorable -->
+    <div
+      class="stick absolute -right-3 -bottom-10 w-[150px] bg-postit px-4 pt-3 pb-4 shadow-[0_6px_14px_-6px_rgb(35_38_43/0.45)] sm:-right-6 sm:w-[170px]"
+      style="transform: rotate(-5deg);"
+    >
+      <p class="font-hand text-[1.55rem] leading-[0.95] text-graphite sm:text-[1.75rem]">
+        Las palabras, solo a mano. Nunca en el ordenador.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,211 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Crear mis documentos | Testigo"
+  description="Configura e imprime en blanco las instrucciones para tus herederos y las hojas de backup de tus frases semilla."
+>
+  <div class="mx-auto max-w-[1400px] px-5 pt-4 sm:px-8">
+    <h1 class="text-[2.1rem] leading-tight font-extrabold tracking-tight sm:text-[2.6rem]">Crea tus documentos</h1>
+    <p class="mt-3 max-w-[70ch] text-[1.06rem] leading-relaxed text-graphite/90">
+      Cuatro pasos y listo. Aquí solo eliges la estructura; los documentos salen en blanco y alias, lugares, nombres y,
+      por supuesto, las palabras se escriben a mano en el papel.
+    </p>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(340px,440px)_1fr] lg:gap-12">
+      <!-- Formulario -->
+      <form id="config" class="space-y-9" autocomplete="off" novalidate onsubmit="return false">
+        <fieldset class="step">
+          <legend class="step-title"><span class="step-no">1</span>Frases semilla</legend>
+          <p class="step-help">Una por cada wallet o dispositivo. Solo indicas cuántas palabras tiene y si usa passphrase.</p>
+          <div id="seeds" class="space-y-3"></div>
+          <button type="button" data-action="add-seed" class="btn-add">
+            <span aria-hidden="true" class="text-[1.3rem] leading-none">+</span> Añadir frase semilla
+          </button>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend class="step-title"><span class="step-no">2</span>Lugares</legend>
+          <p class="step-help">Cada lugar guarda una copia de todas tus frases semilla: con 2 lugares, cada semilla tiene 2 copias.</p>
+          <div class="card">
+            <div class="row">
+              <span class="row-text">
+                <span class="row-label">Lugares para las semillas</span>
+                <span id="places-hint" class="row-help" aria-live="polite"></span>
+              </span>
+              <span id="places"></span>
+            </div>
+            <div id="pp-places-box" class="row" hidden>
+              <span class="row-text">
+                <span class="row-label">Lugares para las passphrases</span>
+                <span class="row-help">Distintos de los de las semillas. Cada uno guarda todas las passphrases.</span>
+              </span>
+              <span id="pp-places"></span>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend class="step-title"><span class="step-no">3</span>Personas de confianza</legend>
+          <div class="card">
+            <div class="row">
+              <span class="row-text">
+                <span class="row-label">Personas</span>
+                <span class="row-help">A quién puede acudir tu familia. Saldrá una ficha en blanco por persona.</span>
+              </span>
+              <span id="people"></span>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend class="step-title"><span class="step-no">4</span>Instrucciones</legend>
+          <div class="card">
+            <label class="row cursor-pointer">
+              <span class="row-text">
+                <span class="row-label">Explicar la recuperación con Rabby</span>
+                <span class="row-help">Lo más sencillo para redes compatibles con Ethereum. Si lo desactivas, se explica con una hardware wallet.</span>
+              </span>
+              <input type="checkbox" role="switch" id="opt-rabby" class="switch" checked />
+            </label>
+            <label class="row cursor-pointer">
+              <span class="row-text">
+                <span class="row-label">Avisar sobre fondos en exchanges</span>
+                <span class="row-help">Cómo reclamar lo que esté en Binance, Coinbase…</span>
+              </span>
+              <input type="checkbox" role="switch" id="opt-exchanges" class="switch" checked />
+            </label>
+          </div>
+        </fieldset>
+      </form>
+
+      <!-- Vista previa -->
+      <section aria-labelledby="preview-title" class="min-w-0 lg:sticky lg:top-4 lg:self-start">
+        <h2 id="preview-title" class="sr-only">Vista previa</h2>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div role="tablist" aria-label="Documento" id="tabs" class="flex flex-wrap gap-1 rounded-md bg-desk-deep p-1"></div>
+          <button
+            type="button"
+            id="print"
+            class="rounded-md bg-ink px-5 py-2.5 font-semibold text-white hover:bg-ink-deep"
+          >
+            Imprimir o guardar en PDF
+          </button>
+        </div>
+        <p id="summary" class="mt-3 text-[0.95rem] text-pencil" aria-live="polite"></p>
+        <div
+          id="preview-wrap"
+          class="mt-4 h-[70vh] overflow-auto rounded-lg border border-desk-deep bg-desk-deep/60 p-4 sm:p-6 lg:h-[calc(100dvh-170px)]"
+        >
+          <div id="preview" class="mx-auto w-[794px] origin-top-left"></div>
+        </div>
+        <p class="mt-3 text-[0.92rem] text-pencil">
+          En el diálogo de impresión, elige «Guardar como PDF» si quieres el archivo. Imprime cada documento por
+          separado.
+        </p>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style is:global>
+  @reference "../styles/global.css";
+
+  /* Pasos del formulario */
+  .step {
+    @apply min-w-0 space-y-3;
+  }
+  .step-title {
+    @apply mb-1 flex items-center gap-3 text-[1.25rem] font-bold;
+  }
+  .step-no {
+    @apply grid size-7 shrink-0 place-items-center rounded-full bg-graphite text-[0.9rem] font-bold text-white;
+  }
+  .step-help {
+    @apply text-[0.97rem] leading-snug text-pencil;
+  }
+
+  /* Tarjeta con filas: texto a la izquierda, control a la derecha */
+  .card {
+    @apply divide-y divide-desk rounded-lg bg-paper;
+  }
+  .row {
+    @apply flex min-h-16 items-center justify-between gap-4 px-4 py-3;
+  }
+  .row[hidden] {
+    display: none;
+  }
+  .row-text {
+    @apply min-w-0;
+  }
+  .row-label {
+    @apply block font-semibold;
+  }
+  .row-help {
+    @apply mt-0.5 block text-[0.92rem] leading-snug text-pencil;
+  }
+
+  /* Contador − n + */
+  .stepper {
+    @apply inline-flex shrink-0 items-center rounded-md border-[1.5px] border-rule bg-paper;
+  }
+  .stepper button {
+    @apply grid size-10 place-items-center text-[1.25rem] font-semibold text-graphite hover:bg-desk disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent;
+  }
+  .stepper output {
+    @apply w-8 text-center text-[1.05rem] font-bold tabular-nums;
+  }
+
+  /* Interruptor sí/no: el mismo para todo el formulario */
+  .switch {
+    appearance: none;
+    @apply relative h-7 w-12 shrink-0 cursor-pointer rounded-full bg-rule transition-colors;
+  }
+  .switch::before {
+    content: "";
+    @apply absolute top-1 left-1 size-5 rounded-full bg-white shadow transition-transform;
+  }
+  .switch:checked {
+    @apply bg-ink;
+  }
+  .switch:checked::before {
+    transform: translateX(1.25rem);
+  }
+
+  /* Selector de palabras */
+  .seg {
+    @apply inline-flex shrink-0 rounded-md border-[1.5px] border-rule bg-paper p-0.5;
+  }
+  .seg label {
+    @apply cursor-pointer;
+  }
+  .seg span {
+    @apply grid h-9 min-w-10 place-items-center rounded px-2 font-semibold text-pencil tabular-nums hover:text-graphite;
+  }
+  .seg input:checked + span {
+    @apply bg-ink text-white;
+  }
+  .seg input:focus-visible + span {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .btn-add {
+    @apply flex w-full items-center justify-center gap-2 rounded-lg border-[1.5px] border-dashed border-pencil/60 px-4 py-3 font-semibold text-graphite hover:border-graphite hover:bg-paper disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .icon-btn {
+    @apply grid size-9 shrink-0 place-items-center rounded-md text-pencil hover:bg-desk hover:text-alert;
+  }
+  .tab {
+    @apply rounded px-3 py-1.5 text-[0.95rem] font-semibold text-pencil hover:text-graphite;
+  }
+  .tab[aria-selected="true"] {
+    @apply bg-paper text-graphite;
+  }
+</style>
+
+<script>
+  import { initGenerator } from "../scripts/generator";
+  initGenerator();
+</script>

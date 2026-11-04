@@ -1,0 +1,201 @@
+---
+import Base from "../layouts/Base.astro";
+import SheetsMock from "../components/SheetsMock.astro";
+
+const steps = [
+  {
+    title: "Configura tus hojas",
+    text: "Indica cuántas frases semilla tienes, de cuántas palabras, en cuántos lugares guardarás una copia de todas y a cuántas personas de confianza puede acudir tu familia. No te pedimos ni una palabra de tus semillas.",
+  },
+  {
+    title: "Imprímelas en blanco",
+    text: "Descarga o imprime cada documento por separado. Si quieres, desconecta internet antes: todo se genera en tu navegador.",
+  },
+  {
+    title: "Rellena a mano y reparte",
+    text: "Escribe las palabras con bolígrafo, comprueba cada una contra tu dispositivo y guarda cada juego de copias en su lugar. Las instrucciones van a otro sitio.",
+  },
+];
+
+const faqs = [
+  {
+    q: "¿Por qué hay que rellenarlo a mano?",
+    a: "Porque cualquier frase semilla que pasa por un ordenador o un móvil puede acabar en una copia de seguridad, un portapapeles o un malware. El papel escrito a mano no se puede hackear a distancia.",
+  },
+  {
+    q: "¿Esta web guarda o envía algo de lo que escribo?",
+    a: "No. En la web no escribes nada: solo eliges cuántas semillas, lugares y personas habrá. Los documentos salen en blanco y alias, lugares y nombres se rellenan a mano. No hay cuentas, cookies ni analítica.",
+  },
+  {
+    q: "¿Qué es la passphrase y la necesito?",
+    a: "Es una contraseña extra que algunas wallets añaden sobre la frase semilla. Si la usas, el generador crea hojas propias para ella, que deben guardarse en un lugar distinto de la semilla. Si no sabes qué es, probablemente no la usas.",
+  },
+  {
+    q: "¿Sirve para Bitcoin, Ethereum o Solana?",
+    a: "Sí: las frases semilla funcionan igual en todas. Las instrucciones explican la recuperación con Rabby, que muestra todas las redes compatibles con Ethereum, y avisan de que para Bitcoin o Solana hay que usar la wallet que indiques en cada hoja.",
+  },
+  {
+    q: "¿Y si tengo criptos en un exchange?",
+    a: "Ahí no hay frase semilla: tus herederos tendrán que reclamarlas al exchange con la documentación de la herencia. Las instrucciones incluyen un aviso para que lo sepan.",
+  },
+  {
+    q: "¿Dónde guardo las instrucciones?",
+    a: "En un sitio distinto de las hojas de backup: junto al testamento, con tu notario o en manos de una persona de confianza. Por sí solas no dan acceso a ningún fondo.",
+  },
+];
+---
+
+<Base
+  title="Testigo: deja escrito cómo recuperar tus criptos"
+  description="Genera e imprime en blanco las hojas para que tu familia pueda recuperar tus frases semilla. Se rellenan a mano y nada sale de tu navegador."
+>
+  <!-- Hero -->
+  <section class="mx-auto grid max-w-6xl items-center gap-14 px-5 pt-8 pb-20 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-16">
+    <div>
+      <h1 class="max-w-[14ch] text-[2.6rem] leading-[1.02] font-extrabold tracking-[-0.025em] text-balance sm:text-[3.6rem] lg:text-[4.1rem]">
+        Si mañana no estás, ¿quién recupera tus criptos?
+      </h1>
+      <p class="mt-7 max-w-[52ch] text-[1.14rem] leading-relaxed text-graphite/90">
+        Crea en un par de minutos las hojas para dejar por escrito qué frases semilla tienes, dónde está cada copia y
+        cómo recuperarlas paso a paso. Se imprimen en blanco y se rellenan a mano: tus palabras nunca pasan por esta web.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href="/generador"
+          class="rounded-md bg-ink px-6 py-3.5 text-[1.05rem] font-semibold text-white hover:bg-ink-deep"
+        >
+          Crear mis documentos
+        </a>
+        <a
+          href="#como-funciona"
+          class="rounded-md border-[1.5px] border-graphite px-6 py-3 text-[1.05rem] font-semibold hover:bg-paper"
+        >
+          Ver cómo funciona
+        </a>
+      </div>
+      <p class="mt-5 text-[0.95rem] text-pencil">Gratis, sin registro y funciona entero en tu navegador.</p>
+    </div>
+    <SheetsMock />
+  </section>
+
+  <!-- Los dos papeles -->
+  <section class="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+    <h2 class="max-w-[24ch] text-[2rem] leading-tight font-extrabold tracking-tight sm:text-[2.4rem]">
+      Dos papeles, guardados en sitios distintos
+    </h2>
+    <p class="mt-4 max-w-[60ch] text-[1.08rem] leading-relaxed text-graphite/90">
+      Separar el índice de las palabras es lo que hace que funcione: quien encuentra uno de los dos no puede hacer nada
+      con él.
+    </p>
+
+    <div class="mt-12 grid gap-8 md:grid-cols-2 md:gap-10">
+      {
+        [
+          {
+            title: "Las instrucciones para tus herederos",
+            text: "El índice de todo. Explica a tu familia cómo protegerse de estafas, cómo recuperar los fondos con Rabby y, al final, qué semillas existen y dónde está cada copia. No contiene ninguna palabra.",
+            where: "junto al testamento",
+            r: "-0.6deg",
+          },
+          {
+            title: "Las hojas de backup",
+            text: "Una hoja por cada copia de cada frase semilla, con las líneas justas para sus 12, 18 o 24 palabras, su alias y qué has usado con ella. Si usas passphrase, tiene sus propias hojas.",
+            where: "una copia en cada sitio",
+            r: "0.6deg",
+          },
+        ].map((d) => (
+          <article class="paper-shadow rounded-[2px] bg-paper p-7 sm:p-9" style={`transform: rotate(${d.r});`}>
+            <h3 class="border-b-2 border-graphite pb-3 text-[1.3rem] font-bold">{d.title}</h3>
+            <p class="mt-4 max-w-[50ch] leading-relaxed">{d.text}</p>
+            <p class="mt-6 flex items-end gap-3 text-[0.95rem]">
+              <span class="shrink-0 text-pencil">Dónde va:</span>
+              <span class="font-hand -mb-1 flex-1 border-b border-pencil pl-1 text-[1.6rem] leading-none text-ink">
+                {d.where}
+              </span>
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Cómo funciona: es una secuencia real, por eso va numerada -->
+  <section id="como-funciona" class="mx-auto max-w-6xl scroll-mt-6 px-5 py-20 sm:px-8">
+    <h2 class="text-[2rem] leading-tight font-extrabold tracking-tight sm:text-[2.4rem]">Cómo funciona</h2>
+    <ol class="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+      {
+        steps.map((s, i) => (
+          <li class="relative border-t-2 border-graphite pt-6">
+            <span class="font-hand absolute -top-[1.55rem] left-0 bg-desk pr-3 text-[2.6rem] leading-none text-ink">
+              {i + 1}
+            </span>
+            <h3 class="text-[1.2rem] font-bold">{s.title}</h3>
+            <p class="mt-3 max-w-[40ch] leading-relaxed text-graphite/90">{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Promesas -->
+  <section class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="grid gap-10 rounded-lg bg-graphite px-7 py-12 text-white sm:px-12 md:grid-cols-[1fr_1.3fr] md:items-center">
+      <h2 class="text-[1.9rem] leading-tight font-extrabold tracking-tight sm:text-[2.2rem]">
+        Lo que esta web nunca va a hacer
+      </h2>
+      <ul class="space-y-4 text-[1.06rem] leading-relaxed">
+        <li class="flex gap-3">
+          <span aria-hidden="true" class="mt-[0.55em] h-[3px] w-4 shrink-0 bg-postit"></span>
+          Pedirte una sola palabra de tus frases semilla, ni tu passphrase.
+        </li>
+        <li class="flex gap-3">
+          <span aria-hidden="true" class="mt-[0.55em] h-[3px] w-4 shrink-0 bg-postit"></span>
+          Enviar a ningún servidor lo que escribas: los documentos se generan en tu navegador.
+        </li>
+        <li class="flex gap-3">
+          <span aria-hidden="true" class="mt-[0.55em] h-[3px] w-4 shrink-0 bg-postit"></span>
+          Usar cookies, analítica o cuentas de usuario.
+        </li>
+        <li class="flex gap-3">
+          <span aria-hidden="true" class="mt-[0.55em] h-[3px] w-4 shrink-0 bg-postit"></span>
+          Guardar tu configuración: al cerrar la pestaña, desaparece.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Preguntas -->
+  <section id="preguntas" class="mx-auto max-w-3xl scroll-mt-6 px-5 pt-24 sm:px-8">
+    <h2 class="text-[2rem] leading-tight font-extrabold tracking-tight sm:text-[2.4rem]">Preguntas frecuentes</h2>
+    <div class="mt-8 border-t border-rule">
+      {
+        faqs.map((f) => (
+          <details class="group border-b border-rule">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-[1.1rem] font-semibold [&::-webkit-details-marker]:hidden">
+              {f.q}
+              <span
+                aria-hidden="true"
+                class="text-[1.5rem] leading-none text-ink transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+              >
+                +
+              </span>
+            </summary>
+            <p class="max-w-[62ch] pb-6 leading-relaxed text-graphite/90">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Cierre -->
+  <section class="mx-auto max-w-6xl px-5 pt-24 sm:px-8">
+    <div class="flex flex-col items-start justify-between gap-6 border-y-2 border-graphite py-10 md:flex-row md:items-center">
+      <p class="max-w-[30ch] text-[1.6rem] leading-snug font-bold sm:text-[1.9rem]">
+        Dejarlo preparado cuesta una tarde. Que tu familia lo pierda, mucho más.
+      </p>
+      <a href="/generador" class="rounded-md bg-ink px-6 py-3.5 text-[1.05rem] font-semibold text-white hover:bg-ink-deep">
+        Crear mis documentos
+      </a>
+    </div>
+  </section>
+</Base>

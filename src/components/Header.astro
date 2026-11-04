@@ -1,0 +1,42 @@
+---
+const path = Astro.url.pathname;
+const onGenerator = path.startsWith("/generador");
+---
+
+<header
+  class:list={[
+    "mx-auto flex w-full items-center justify-between gap-6 px-5 py-5 sm:px-8",
+    onGenerator ? "max-w-[1400px]" : "max-w-6xl",
+  ]}
+>
+  <a href="/" class="flex items-center gap-3" aria-label="Testigo, inicio">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <rect x="5" y="3" width="22" height="28" rx="1.5" fill="#fff" stroke="#23262b" stroke-width="1.6"></rect>
+      <path d="M9.5 11h13M9.5 16h13M9.5 21h8" stroke="#c3ccd6" stroke-width="1.6"></path>
+      <path d="M20 26.5c2.2-4.6 5.5-8 9-10.5" stroke="#1f3a8f" stroke-width="2.2" stroke-linecap="round" fill="none"></path>
+    </svg>
+    <span class="text-[1.15rem] font-extrabold tracking-tight whitespace-nowrap">Testigo</span>
+  </a>
+  <nav aria-label="Principal" class="flex items-center gap-1 text-[0.95rem] sm:gap-2">
+    {
+      !onGenerator && (
+        <>
+          <a href="/#como-funciona" class="hidden rounded px-3 py-2 hover:bg-desk-deep sm:inline-block">Cómo funciona</a>
+          <a href="/#preguntas" class="hidden rounded px-3 py-2 hover:bg-desk-deep sm:inline-block">Preguntas</a>
+        </>
+      )
+    }
+    {
+      onGenerator ? (
+        <a href="/" class="rounded px-3 py-2 hover:bg-desk-deep">Volver al inicio</a>
+      ) : (
+        <a
+          href="/generador"
+          class="rounded-md bg-ink px-3.5 py-2 font-semibold whitespace-nowrap text-white hover:bg-ink-deep sm:px-4"
+        >
+          Crear <span class="hidden sm:inline">mis </span>documentos
+        </a>
+      )
+    }
+  </nav>
+</header>
