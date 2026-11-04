@@ -1,11 +1,11 @@
 ---
-// Ilustración del hero: las dos hojas reales en miniatura.
-// Lo escrito "a bolígrafo" es solo alias y lugares (como los rellenaría el usuario a mano); las palabras quedan en blanco a propósito.
+// Hero illustration: the two real sheets in miniature.
+// The "pen-written" text is only aliases and locations (as the user would fill them in by hand); the words are intentionally left blank.
 const words = Array.from({ length: 12 }, (_, i) => i + 1);
 ---
 
 <div class="relative mx-auto h-[500px] w-full max-w-[460px] sm:h-[580px]" aria-hidden="true">
-  <!-- Hoja trasera: instrucciones (el índice) -->
+  <!-- Back sheet: instructions (the index) -->
   <div
     class="paper-shadow settle absolute top-2 left-0 w-[80%] sm:w-[72%] rounded-[2px] bg-paper p-5 sm:p-6"
     style="--r: -4deg; --r-from: -9deg; transform: rotate(-4deg);"
@@ -37,7 +37,7 @@ const words = Array.from({ length: 12 }, (_, i) => i + 1);
     </div>
   </div>
 
-  <!-- Hoja delantera: hoja de backup con las palabras en blanco -->
+  <!-- Front sheet: backup sheet with blank words -->
   <div
     class="paper-shadow settle-late absolute top-[175px] right-0 w-[82%] sm:w-[74%] rounded-[2px] bg-paper p-5 sm:top-[200px] sm:p-6"
     style="--r: 3deg; --r-from: 8deg; transform: rotate(3deg);"
@@ -67,7 +67,7 @@ const words = Array.from({ length: 12 }, (_, i) => i + 1);
       Verificada en el dispositivo
     </p>
 
-    <!-- El pósit: el elemento memorable -->
+    <!-- The sticky note: the memorable element -->
     <div
       class="stick absolute -right-3 -bottom-10 w-[150px] bg-postit px-4 pt-3 pb-4 shadow-[0_6px_14px_-6px_rgb(35_38_43/0.45)] sm:-right-6 sm:w-[170px]"
       style="transform: rotate(-5deg);"

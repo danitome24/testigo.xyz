@@ -13,10 +13,10 @@ import {
   type WordCount,
 } from "../lib/documents";
 
-type DocKey = "instrucciones" | "backup" | "passphrase";
+type DocKey = "instructions" | "backup" | "passphrase";
 
 const DOC_TITLES: Record<DocKey, string> = {
-  instrucciones: "Instrucciones de recuperación para mis herederos",
+  instructions: "Instrucciones de recuperación para mis herederos",
   backup: "Hojas de backup de frases semilla",
   passphrase: "Hojas de passphrase",
 };
@@ -24,9 +24,9 @@ const DOC_TITLES: Record<DocKey, string> = {
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
 export function initGenerator() {
-  // Solo en memoria: nada se guarda ni se envía.
+  // In memory only: nothing is stored or sent.
   const cfg: Config = defaultConfig();
-  let current: DocKey = "instrucciones";
+  let current: DocKey = "instructions";
 
   const placesEl = $("#places");
   const seedsEl = $("#seeds");
@@ -43,10 +43,10 @@ export function initGenerator() {
 
   const removeIcon = `<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
 
-  /* ---------------- Render del formulario ---------------- */
+  /* ---------------- Form rendering ---------------- */
 
-  // Cada lugar guarda una copia de todas las semillas: copias por semilla = lugares.
-  // Las passphrases van en lugares propios, que también guardan una copia de todas.
+  // Each location keeps a copy of every seed: copies per seed = locations.
+  // Passphrases go in their own locations, each of which also keeps a copy of all of them.
   const anyPp = () => cfg.seeds.some((s) => s.passphrase);
 
   function renderPlaces() {
@@ -107,10 +107,10 @@ export function initGenerator() {
     peopleEl.innerHTML = stepper("people", 0, cfg.people, 0, MAX_PEOPLE, "Número de personas de confianza");
   }
 
-  /* ---------------- Vista previa ---------------- */
+  /* ---------------- Preview ---------------- */
 
   const docs = (): Record<DocKey, string> => ({
-    instrucciones: instructionsDoc(cfg),
+    instructions: instructionsDoc(cfg),
     backup: backupDoc(cfg),
     passphrase: passphraseDoc(cfg),
   });
@@ -122,7 +122,7 @@ export function initGenerator() {
     const pp = ppCount();
     if (!pp && current === "passphrase") current = "backup";
     const tabs: [DocKey, string][] = [
-      ["instrucciones", "Instrucciones"],
+      ["instructions", "Instrucciones"],
       ["backup", `Hojas de backup (${sheetCount()})`],
     ];
     if (pp) tabs.push(["passphrase", `Passphrases (${pp})`]);
@@ -138,7 +138,7 @@ export function initGenerator() {
     previewEl.innerHTML = docs()[current].replaceAll('class="doc-page', 'class="paper-shadow doc-page');
     const n = previewEl.querySelectorAll(".doc-page.sheet").length;
     const sum: Record<DocKey, string> = {
-      instrucciones: "Documento de varias páginas. Guárdalo lejos de las hojas de backup.",
+      instructions: "Documento de varias páginas. Guárdalo lejos de las hojas de backup.",
       backup: `${n} páginas: una de uso y ${n - 1} hojas, una por cada copia.`,
       passphrase: `${n} páginas: una de uso y ${n - 1} hojas de passphrase.`,
     };
@@ -163,7 +163,7 @@ export function initGenerator() {
     renderPreview();
   }
 
-  /* ---------------- Eventos ---------------- */
+  /* ---------------- Events ---------------- */
 
   document.addEventListener("click", (e) => {
     const t = (e.target as HTMLElement).closest<HTMLElement>("[data-action], [data-tab]");
@@ -212,7 +212,7 @@ export function initGenerator() {
       if (el.dataset.field === "words") s.words = Number(el.value) as WordCount;
       else if (el.dataset.field === "passphrase") s.passphrase = el.checked;
       else return;
-      // Cambios de estructura: se redibuja la tarjeta y se devuelve el foco al mismo control.
+      // Structural changes: re-render the card and return focus to the same control.
       const id = el.id;
       refresh(true);
       if (id) document.getElementById(id)?.focus();
@@ -221,7 +221,7 @@ export function initGenerator() {
     renderPreview();
   });
 
-  // Flechas izquierda/derecha entre pestañas
+  // Left/right arrow keys move between tabs
   tabsEl.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     const tabs = [...tabsEl.querySelectorAll<HTMLButtonElement>("[data-tab]")];
@@ -233,13 +233,13 @@ export function initGenerator() {
     tabsEl.querySelector<HTMLButtonElement>(`[data-tab="${current}"]`)?.focus();
   });
 
-  /* ---------------- Impresión ---------------- */
+  /* ---------------- Printing ---------------- */
 
   const printRoot = $("#print-root");
   const originalTitle = document.title;
   $("#print").addEventListener("click", () => {
     printRoot.innerHTML = docs()[current];
-    document.title = DOC_TITLES[current]; // nombre sugerido del PDF
+    document.title = DOC_TITLES[current]; // suggested PDF file name
     window.print();
   });
   window.addEventListener("afterprint", () => {

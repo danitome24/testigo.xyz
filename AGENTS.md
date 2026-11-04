@@ -16,7 +16,8 @@ Testigo is a static Astro + Tailwind CSS site that generates blank, printable do
 ## Language
 
 - The site's UI and generated documents are in **Spanish**. Keep user-facing copy in Spanish unless asked otherwise.
-- Code comments are currently in Spanish; new code and docs may be in English. `README.md` and `AGENTS.md` are in English.
+- Code, identifiers, comments and docs (`README.md`, `AGENTS.md`) are in **English**. Only user-facing strings are Spanish.
+- Public URLs stay in Spanish (`/generador`, `#como-funciona`, `#preguntas`); don't rename them without updating every link.
 
 ## Tech stack
 

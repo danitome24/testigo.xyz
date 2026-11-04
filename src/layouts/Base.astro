@@ -25,12 +25,12 @@ const { title, description } = Astro.props;
   </head>
   <body class="min-h-dvh flex flex-col">
     <a
-      href="#contenido"
+      href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-paper focus:px-4 focus:py-2 focus:rounded"
       >Saltar al contenido</a
     >
     <Header />
-    <main id="contenido" class="flex-1">
+    <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />

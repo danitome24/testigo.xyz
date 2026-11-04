@@ -14,7 +14,7 @@ import Base from "../layouts/Base.astro";
     </p>
 
     <div class="mt-10 grid gap-10 lg:grid-cols-[minmax(340px,440px)_1fr] lg:gap-12">
-      <!-- Formulario -->
+      <!-- Form -->
       <form id="config" class="space-y-9" autocomplete="off" novalidate onsubmit="return false">
         <fieldset class="step">
           <legend class="step-title"><span class="step-no">1</span>Frases semilla</legend>
@@ -80,7 +80,7 @@ import Base from "../layouts/Base.astro";
         </fieldset>
       </form>
 
-      <!-- Vista previa -->
+      <!-- Preview -->
       <section aria-labelledby="preview-title" class="min-w-0 lg:sticky lg:top-4 lg:self-start">
         <h2 id="preview-title" class="sr-only">Vista previa</h2>
         <div class="flex flex-wrap items-center justify-between gap-3">
@@ -112,7 +112,7 @@ import Base from "../layouts/Base.astro";
 <style is:global>
   @reference "../styles/global.css";
 
-  /* Pasos del formulario */
+  /* Form steps */
   .step {
     @apply min-w-0 space-y-3;
   }
@@ -126,7 +126,7 @@ import Base from "../layouts/Base.astro";
     @apply text-[0.97rem] leading-snug text-pencil;
   }
 
-  /* Tarjeta con filas: texto a la izquierda, control a la derecha */
+  /* Card with rows: text on the left, control on the right */
   .card {
     @apply divide-y divide-desk rounded-lg bg-paper;
   }
@@ -146,7 +146,7 @@ import Base from "../layouts/Base.astro";
     @apply mt-0.5 block text-[0.92rem] leading-snug text-pencil;
   }
 
-  /* Contador − n + */
+  /* Counter − n + */
   .stepper {
     @apply inline-flex shrink-0 items-center rounded-md border-[1.5px] border-rule bg-paper;
   }
@@ -157,7 +157,7 @@ import Base from "../layouts/Base.astro";
     @apply w-8 text-center text-[1.05rem] font-bold tabular-nums;
   }
 
-  /* Interruptor sí/no: el mismo para todo el formulario */
+  /* Yes/no switch: the same one across the whole form */
   .switch {
     appearance: none;
     @apply relative h-7 w-12 shrink-0 cursor-pointer rounded-full bg-rule transition-colors;
@@ -173,7 +173,7 @@ import Base from "../layouts/Base.astro";
     transform: translateX(1.25rem);
   }
 
-  /* Selector de palabras */
+  /* Word count selector */
   .seg {
     @apply inline-flex shrink-0 rounded-md border-[1.5px] border-rule bg-paper p-0.5;
   }

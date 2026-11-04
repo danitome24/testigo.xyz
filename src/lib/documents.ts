@@ -1,5 +1,5 @@
-// Genera los documentos imprimibles. Todo ocurre en el navegador:
-// aquí nunca entra ni sale ninguna palabra de una frase semilla.
+// Builds the printable documents. Everything happens in the browser:
+// no seed phrase word ever enters or leaves this code.
 
 export const WORD_COUNTS = [12, 15, 18, 21, 24] as const;
 export type WordCount = (typeof WORD_COUNTS)[number];
@@ -11,11 +11,11 @@ export interface Seed {
 
 export interface Config {
   seeds: Seed[];
-  /** Lugares para las semillas. Cada uno guarda una copia de todas: copias por semilla = places. */
+  /** Locations for the seeds. Each one keeps a copy of all of them: copies per seed = places. */
   places: number;
-  /** Lugares para las passphrases, distintos de los de las semillas. Cada uno guarda todas las passphrases. */
+  /** Locations for the passphrases, separate from the seed locations. Each one keeps all passphrases. */
   ppPlaces: number;
-  /** cuántas fichas de personas de confianza habrá; se rellenan a mano */
+  /** How many trusted-person entries there will be; filled in by hand. */
   people: number;
   rabby: boolean;
   exchanges: boolean;
@@ -53,24 +53,24 @@ const ESC: Record<string, string> = {
 };
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ESC[c]);
 
-// Numeración de lugares: primero los de las semillas (1…places), luego los de passphrases.
+// Location numbering: seed locations first (1…places), then passphrase locations.
 const ppPlaceNo = (cfg: Config, c: number) => cfg.places + c + 1;
 
-/** Una línea con etiqueta; si hay valor, sale impreso; si no, queda la línea para escribir. */
+/** A labelled line; if there is a value it is printed, otherwise a blank line is left to write on. */
 function field(label: string, value = "", half = false) {
   const v = value.trim();
   return `<p class="f${half ? " half" : ""}"><span class="fl">${label}</span>${
     v ? `<span class="fv">${esc(v)}</span>` : `<span class="ln"></span>`
   }</p>`;
 }
-/** Línea grande para el alias: es lo que identifica cada semilla en todos los documentos. */
+/** Large line for the alias: it identifies each seed across all documents. */
 const aliasLine = (label = "Alias:") => `<p class="f alias"><span class="fl">${label}</span><span class="ln"></span></p>`;
 const blank = (n = 1) => Array.from({ length: n }, () => `<p class="f"><span class="ln"></span></p>`).join("");
 
 const anyPassphrase = (cfg: Config) => cfg.seeds.some((s) => s.passphrase);
 
 /* ------------------------------------------------------------------ */
-/* 1. Instrucciones de recuperación para herederos                     */
+/* 1. Recovery instructions for heirs                                  */
 /* ------------------------------------------------------------------ */
 
 function rabbySteps(pp: boolean) {
@@ -119,7 +119,7 @@ export function instructionsDoc(cfg: Config): string {
   const people = Array.from(
     { length: cfg.people },
     (_, i) => `
-<div class="ficha">
+<div class="entry">
   <h3>Persona ${i + 1}</h3>
   ${field("Nombre:")}
   ${field("Relación:", "", true)}${field("Teléfono:", "", true)}
@@ -127,8 +127,8 @@ export function instructionsDoc(cfg: Config): string {
 </div>`,
   ).join("");
 
-  const placeFicha = (no: number, holds: string) => `
-<div class="ficha">
+  const placeEntry = (no: number, holds: string) => `
+<div class="entry">
   <h3>Lugar n.º ${no} <span class="tag">(${holds})</span></h3>
   ${field("Dónde es:")}
   ${blank(1)}
@@ -137,14 +137,14 @@ export function instructionsDoc(cfg: Config): string {
   const ppSeeds = cfg.seeds.filter((s) => s.passphrase).length;
   const places =
     Array.from({ length: cfg.places }, (_, i) =>
-      placeFicha(i + 1, `copia ${i + 1} de ${cfg.seeds.length === 1 ? "la frase semilla" : `las ${cfg.seeds.length} frases semilla`}`),
+      placeEntry(i + 1, `copia ${i + 1} de ${cfg.seeds.length === 1 ? "la frase semilla" : `las ${cfg.seeds.length} frases semilla`}`),
     ).join("") +
     (pp
       ? Array.from({ length: cfg.ppPlaces }, (_, c) =>
-          placeFicha(ppPlaceNo(cfg, c), `copia ${c + 1} de ${ppSeeds === 1 ? "la passphrase" : `las ${ppSeeds} passphrases`}`),
+          placeEntry(ppPlaceNo(cfg, c), `copia ${c + 1} de ${ppSeeds === 1 ? "la passphrase" : `las ${ppSeeds} passphrases`}`),
         ).join("")
       : "");
-  const fichas = cfg.seeds
+  const seedEntries = cfg.seeds
     .map((s) => {
       const copies = Array.from({ length: cfg.places }, (_, c) =>
         field(`Hoja de backup ${c + 1} de ${cfg.places} está en:`, `Lugar n.º ${c + 1}`),
@@ -155,7 +155,7 @@ export function instructionsDoc(cfg: Config): string {
           ).join("")
         : "";
       return `
-<div class="ficha">
+<div class="entry">
   <h3>Frase semilla <span class="tag">(${s.words} palabras${s.passphrase ? ", con passphrase" : ""})</span></h3>
   ${aliasLine()}
   ${field("Observaciones:")}
@@ -210,7 +210,7 @@ export function instructionsDoc(cfg: Config): string {
   <h2>Frases semilla y dónde están</h2>
   <p>Si has leído todo lo anterior, ya sabes cómo protegerte de estafas y cómo recuperar los fondos. Ahora sí: aquí está qué frases semilla existen y dónde está cada Hoja de backup.</p>
   <p>Cada ficha es una frase semilla y se identifica por su alias, el mismo que está escrito en sus Hojas de backup, donde están las palabras y qué se ha usado con esa semilla. Los lugares se indican por número: qué es cada uno está en la sección «Lugares», justo después.</p>
-  ${fichas}
+  ${seedEntries}
   <h2>Lugares</h2>
   <p>${
     cfg.places === 1
@@ -228,7 +228,7 @@ export function instructionsDoc(cfg: Config): string {
 }
 
 /* ------------------------------------------------------------------ */
-/* 2. Hojas de backup (una página por copia de cada semilla)           */
+/* 2. Backup sheets (one page per copy of each seed)                   */
 /* ------------------------------------------------------------------ */
 
 const usageSheet = (title: string, items: string[]) => `
@@ -282,7 +282,7 @@ export function backupDoc(cfg: Config): string {
 }
 
 /* ------------------------------------------------------------------ */
-/* 3. Hojas de passphrase (solo si alguna semilla la usa)              */
+/* 3. Passphrase sheets (only if some seed uses one)                   */
 /* ------------------------------------------------------------------ */
 
 export function passphraseDoc(cfg: Config): string {
