@@ -144,26 +144,17 @@ export function instructionsDoc(cfg: Config): string {
           placeEntry(ppPlaceNo(cfg, c), `copia ${c + 1} de ${ppSeeds === 1 ? "la passphrase" : `las ${ppSeeds} passphrases`}`),
         ).join("")
       : "");
+  // Seed cards don't list locations: every location holds a copy of every seed, see «Lugares».
   const seedEntries = cfg.seeds
-    .map((s) => {
-      const copies = Array.from({ length: cfg.places }, (_, c) =>
-        field(`Hoja de backup ${c + 1} de ${cfg.places} está en:`, `Lugar n.º ${c + 1}`),
-      ).join("");
-      const pps = s.passphrase
-        ? Array.from({ length: cfg.ppPlaces }, (_, c) =>
-            field(`Passphrase, copia ${c + 1} de ${cfg.ppPlaces}, está en:`, `Lugar n.º ${ppPlaceNo(cfg, c)}`),
-          ).join("")
-        : "";
-      return `
+    .map(
+      (s) => `
 <div class="entry">
   <h3>Frase semilla <span class="tag">(${s.words} palabras${s.passphrase ? ", con passphrase" : ""})</span></h3>
   ${aliasLine()}
   ${field("Observaciones:")}
   ${blank(1)}
-  ${copies}
-  ${pps}
-</div>`;
-    })
+</div>`,
+    )
     .join("");
 
   return `
@@ -180,7 +171,7 @@ export function instructionsDoc(cfg: Config): string {
   <p>Antes de tocar nada, lee el documento entero una vez. La regla más importante es la primera.</p>
   <ol>
     <li><b>No compartas las hojas de backup con nadie</b>, tampoco con supuestos expertos, empresas de recuperación ni personas que te contacten por redes. Nadie legítimo necesita ver la semilla.</li>
-    <li><b>Reúne las piezas</b> siguiendo la sección «Frases semilla y dónde están», al final de este documento${pp ? ". Las passphrases están en hojas propias, guardadas aparte de las semillas" : ""}.</li>
+    <li><b>Reúne las piezas</b> siguiendo las secciones «Frases semilla» y «Lugares», al final de este documento${pp ? ". Las passphrases están en hojas propias, guardadas aparte de las semillas" : ""}.</li>
     <li><b>Sigue el procedimiento de recuperación</b> de este documento.</li>
     <li><b>Si no te ves capaz</b>, busca ayuda de alguien de mucha confianza y con experiencia, y hazlo juntos, delante de ti, sin que esa persona se lleve fotos ni copias.</li>
     <li><b>Una vez recuperados</b>, mueve los fondos a wallets nuevas generadas por ti, o véndelos en un exchange regulado si es lo que prefieres. Consulta con un asesor fiscal la declaración de la herencia.</li>
@@ -207,16 +198,16 @@ export function instructionsDoc(cfg: Config): string {
       : ""
   }
 
-  <h2>Frases semilla y dónde están</h2>
-  <p>Si has leído todo lo anterior, ya sabes cómo protegerte de estafas y cómo recuperar los fondos. Ahora sí: aquí está qué frases semilla existen y dónde está cada Hoja de backup.</p>
-  <p>Cada ficha es una frase semilla y se identifica por su alias, el mismo que está escrito en sus Hojas de backup, donde están las palabras y qué se ha usado con esa semilla. Los lugares se indican por número: qué es cada uno está en la sección «Lugares», justo después.</p>
+  <h2>Frases semilla</h2>
+  <p>Si has leído todo lo anterior, ya sabes cómo protegerte de estafas y cómo recuperar los fondos. Ahora sí: aquí está qué frases semilla existen y, en la sección «Lugares», dónde están sus Hojas de backup.</p>
+  <p>Cada ficha es una frase semilla y se identifica por su alias, el mismo que está escrito en sus Hojas de backup, donde están las palabras y qué se ha usado con esa semilla.</p>
   ${seedEntries}
   <h2>Lugares</h2>
   <p>${
     cfg.places === 1
       ? "Todas las Hojas de backup están juntas en un mismo lugar."
       : `Cada lugar guarda una copia de todas las frases semilla, así que basta con llegar a uno de los ${cfg.places} para recuperarlas.`
-  }${pp ? " Las passphrases están en lugares propios, separados de las semillas." : ""} El número de lugar es el que aparece en cada ficha de arriba.</p>
+  }${pp ? " Las passphrases están en lugares propios, separados de las semillas." : ""} Cada Hoja de backup indica el número de su lugar.</p>
   ${places}
   ${
     cfg.exchanges
