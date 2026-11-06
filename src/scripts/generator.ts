@@ -15,11 +15,8 @@ import {
 
 type DocKey = "instructions" | "backup" | "passphrase";
 
-const DOC_TITLES: Record<DocKey, string> = {
-  instructions: "Instrucciones de recuperación para mis herederos",
-  backup: "Hojas de backup de frases semilla",
-  passphrase: "Hojas de passphrase",
-};
+// Suggested PDF file name when printing every document at once.
+const PRINT_TITLE = "Documentos de recuperación para mis herederos";
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
@@ -238,8 +235,10 @@ export function initGenerator() {
   const printRoot = $("#print-root");
   const originalTitle = document.title;
   $("#print").addEventListener("click", () => {
-    printRoot.innerHTML = docs()[current];
-    document.title = DOC_TITLES[current]; // suggested PDF file name
+    // Print every document in one go: instructions, backup sheets and, if any, passphrase sheets.
+    const d = docs();
+    printRoot.innerHTML = d.instructions + d.backup + d.passphrase;
+    document.title = PRINT_TITLE; // suggested PDF file name
     window.print();
   });
   window.addEventListener("afterprint", () => {

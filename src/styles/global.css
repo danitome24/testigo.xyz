@@ -273,7 +273,7 @@
   color: #50555d;
 }
 
-/* Print: only the selected document is printed */
+/* Print: all generated documents, one after another */
 #print-root {
   display: none;
 }
